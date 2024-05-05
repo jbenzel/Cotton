@@ -4,11 +4,11 @@ function features = featureExtraction(processedImage)
 
     % Call functions to extract color, shape, and GLCM features
     colorFeatures = extractColorFeatures(processedImage);
-    shapeFeatures = extractShapeFeatures(processedImage);
+    %shapeFeatures = extractShapeFeatures(processedImage);
     glcmFeatures = extractGLCMFeatures(processedImage);
 
-    % Combine all features into a single array
-    features = [colorFeatures, shapeFeatures, glcmFeatures];
+    % Combine all features into a single row array
+    features = [colorFeatures, glcmFeatures];
 end
 
 function colorFeatures = extractColorFeatures(processedImage)
@@ -20,17 +20,14 @@ function colorFeatures = extractColorFeatures(processedImage)
     greenHistogram = imhist(greenChannel);
 
     % Normalize the histogram
-    greenHistogram = greenHistogram / max(greenHistogram);
+    greenHistogram = greenHistogram / sum(greenHistogram);
 
-    % Display the green histogram
-    figure;
-    bar(greenHistogram, 'g');
-    title('Green Histogram');
+    % Round to the ten-thousands place
+    greenHistogram = round(greenHistogram * 10000) / 10000;
 
-    % Output an empty array
-    colorFeatures = [];
+    % Output a row array
+    colorFeatures = greenHistogram.';
 end
-
 
 function shapeFeatures = extractShapeFeatures(processedImage)
     % Convert the image to grayscale
@@ -38,12 +35,8 @@ function shapeFeatures = extractShapeFeatures(processedImage)
 
     edges = edge(grayImg, 'sobel');
 
-    % Display the edges
-    figure;
-    imshow(edges);
-    title('Edges');
-
-    shapeFeatures = [edges];
+    % Output a row array
+    shapeFeatures = edges(:).';
 end
 
 function glcmFeatures = extractGLCMFeatures(processedImage)
@@ -67,22 +60,20 @@ function glcmFeatures = extractGLCMFeatures(processedImage)
     for i = 1:levels
         for j = 1:levels
             % Contrast: Measure of the intensity contrast between a pixel and its neighbor
-            contrast += (i - j)^2 * glcm(i, j);
+            contrast = contrast + (i - j)^2 * glcm(i, j);
 
             % Homogeneity: Measures the closeness of the distribution of elements in GLCM to GLCM diagonal
-            homogeneity += glcm(i, j) / (1 + abs(i - j));
+            homogeneity = homogeneity + glcm(i, j) / (1 + abs(i - j));
 
             % Energy: Sum of squared elements in the GLCM
-            energy += glcm(i, j)^2;
+            energy = energy + glcm(i, j)^2;
         end
     end
 
-    disp("Texture Properties:");
-    fprintf('Contrast: %f\n', contrast);
-    fprintf('Homogeneity: %f\n', homogeneity);
-    fprintf('Energy: %f\n', energy);
-
     % Return features as an array
     glcmFeatures = [contrast, homogeneity, energy];
+    %disp(['GLCM Features: ', num2str(glcmFeatures)]);
 end
+
+
 
