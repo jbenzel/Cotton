@@ -35,7 +35,18 @@ disp('Actual labels:');
 disp(num2str(numericLabels(idx_test)')); % Convert to string for comparison
 disp(['Length of test set: ', num2str(length(idx_test))]);
 
-% Compare predicted labels with actual labels and calculate accuracy
-accuracy = sum(predicted_numericLabels == numericLabels(idx_test)) / length(idx_test);
-disp(['Accuracy: ', num2str(accuracy * 100), '%']);
+% Assuming inputFeatures is a cell array with features in one array in one cell
+input_features_array = inputFeatures{1}; % Extract the array of features
+num_features = size(input_features_array, 2);
 
+% Use the trained model (mdl) to predict labels for the input features
+predicted_labels_input = predict(mdl, input_features_array);
+
+% Convert predicted labels to numeric values
+predicted_numericLabels_input = strcmp(predicted_labels_input, 'diseased');
+
+if predicted_numericLabels_input == 0
+    disp('The cotton plant is healthy.');
+else
+    disp('The cotton plant is unhealthy.');
+end

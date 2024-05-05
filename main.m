@@ -77,8 +77,8 @@ processedImage = preprocessing(inputImage);
 
 % Extract features from the input preprocessed image
 features = featureExtraction(processedImage);
-inputFeatures = features;
+inputFeatures = {features, ''}; % Create a cell array with features in the first column and an empty string in the second column
 
-% Call the classification script
+% Call the classification script with inputFeatures
 classification;
 
