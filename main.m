@@ -1,5 +1,7 @@
 % main.m
 
+clear
+clc
 pkg load image
 pkg load statistics
 
@@ -9,7 +11,13 @@ pkg load statistics
 datasetPath = 'Dataset';
 
 % Load and preprocess the input image
+
+%inputImagePath = 'Input Image\healthy (1).png';
 inputImagePath = 'Input Image\CS1 (1).jpg';
+%inputImagePath = 'Input Image\CS1_2_sooty (1).jpg';
+%inputImagePath = 'Input Image\CS1_Sooty (1).jpeg';
+%inputImagePath = 'Input Image\CS2 (1).jpeg';
+%inputImagePath = 'Input Image\CS2_sooty (1).jpeg';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -77,8 +85,8 @@ processedImage = preprocessing(inputImage);
 
 % Extract features from the input preprocessed image
 features = featureExtraction(processedImage);
-inputFeatures = {features, ''}; % Create a cell array with features in the first column and an empty string in the second column
+inputFeatures = {features, ''};
 
-% Call the classification script with inputFeatures
+% Call classification
 classification;
 

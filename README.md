@@ -6,14 +6,12 @@ This MATLAB *(Octave)* code is designed to classify cotton leaves as either heal
 
 2. **Feature Extraction**: Extracts color, shape, and GLCM (Gray-Level Co-occurrence Matrix) features from the preprocessed image.
 
-3. **Classification**: Currently, classification is a placeholder and returns 0 for all metrics.
+3. **Classification**: Uses a k-nearest neighbors (KNN) model to classify the image as healthy or diseased based on the extracted features. The model is trained on a dataset with known labels.
 
 ## Usage
 
-1. Ensure the image processing package is loaded: `pkg load image;`
-
-2. Set the `imagePath` variable to the path of the image you want to process.
-
+1. Set the `datasetPath` variable to the path of the dataset containing images of cotton leaves.
+2. Set the `inputImagePath` variable to the path of the image you want to classify.
 3. Run `main.m`.
 
 ## Example Images
