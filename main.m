@@ -1,40 +1,84 @@
 % main.m
 
-% Ensure the image processing package is loaded
-pkg load image;
+pkg load image
+pkg load statistics
 
-% Load an image | These are just some diverse example images
-imagePath = 'Dataset\healthy\healthy (1).png';
-%imagePath = 'Dataset\curl_stage1\CS1 (37).png';
-%imagePath = 'Dataset\curl_stage1+curl_stage2+sooty\CS1_2_sooty (13).png';
-%imagePath = 'Dataset\curl_stage1+curl_stage2+sooty\CS1_2_sooty (1).jpg';
-%imagePath = 'Dataset\curl_stage2+sooty\CS2_sooty (2).jpeg';
+%%%%%%%%%%%%   Variables Required for User Change   %%%%%%%%%%%%
 
-image = imread(imagePath);
+% Define the path to the dataset folder
+datasetPath = 'Dataset';
 
-% Display the original image
-figure;
-subplot(1, 2, 1);
-imshow(image);
-title('Original Image');
+% Load and preprocess the input image
+inputImagePath = 'Input Image\CS1 (1).jpg';
 
-% Call preprocessing
-processedImage = preprocessing(image);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Display processed image | Might commet out in future, for now allows you to see changes
-subplot(1, 2, 2);
-imshow(processedImage);
-title('Processed Image');
+% Check if data.mat exists
+if exist('data.mat', 'file') == 2
+    % Load existing data
+    load('data.mat');
+else
+    % List all subfolders in the dataset folder
+    subfolders = dir(datasetPath);
+    subfolders = subfolders([subfolders.isdir]); % Keep only directories
+    subfolders = subfolders(~ismember({subfolders.name}, {'.', '..'})); % Remove '.' and '..'
 
-% Call featureExtraction
+    % Initialize an array to store features and labels
+    data = cell(0, 2);
+
+    % Loop through each subfolder
+    for i = 1:length(subfolders)
+        subfolderName = subfolders(i).name;
+        subfolderPath = fullfile(datasetPath, subfolderName);
+
+        % Determine the label (healthy or diseased) based on the subfolder name
+        if strcmpi(subfolderName, 'healthy')
+            label = 'healthy';
+        else
+            label = 'diseased';
+        end
+
+        % List all image files in the subfolder
+        imageFiles = dir(fullfile(subfolderPath, '*.png'));
+        imageFiles = [imageFiles; dir(fullfile(subfolderPath, '*.jpg'))];
+
+        % Loop through each image file
+        for j = 1:length(imageFiles)
+            imagePath = fullfile(subfolderPath, imageFiles(j).name);
+
+            % Print the image being processed
+            disp(['Processing Image: ', imageFiles(j).name]);
+
+            % Load the image
+            image = imread(imagePath);
+
+            % Preprocess the image
+            processedImage = preprocessing(image);
+
+            % Extract features
+            features = featureExtraction(processedImage);
+
+            % Add features and label to the data array
+            data{end+1, 1} = features;
+            data{end, 2} = label;
+            %disp(['Label for the current image: ', label]);
+        end
+    end
+
+    % Save the data array to a file
+    save('data.mat', 'data');
+end
+
+
+disp('Input Image Processing, Please Wait...');
+%Input Image Operations
+inputImage = imread(inputImagePath);
+processedImage = preprocessing(inputImage);
+
+% Extract features from the input preprocessed image
 features = featureExtraction(processedImage);
+inputFeatures = features;
 
-% Call classification
-[accuracy, precision, recall, f1Score] = classification(features);
-
-% Display the results
-disp(['Accuracy: ', num2str(accuracy)]);
-disp(['Precision: ', num2str(precision)]);
-disp(['Recall: ', num2str(recall)]);
-disp(['F1 Score: ', num2str(f1Score)]);
+% Call the classification script
+classification;
 
