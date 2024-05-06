@@ -18,6 +18,6 @@ Our MATLAB *(Octave)* code is designed to classify cotton leaves as either healt
 
 The `Dataset` folder contains example images of cotton leaves for both healthy and diseased plants.
 
-## Evaluation
+## Evaluation from your Results
 
  While the developed system is faster and boasts a passable and high accuracy rate, manual diagnosis is still  more accurate. This is because the developed system relies on preset teachings, whereas manual diagnosis, while considerably  slower, tends to have a higher accuracy through human judgment.
