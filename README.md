@@ -15,8 +15,8 @@ Our MATLAB *(Octave)* code is designed to classify cotton leaves as either healt
 ## How-to-Use
 
 1. If the `Cotton-main` folder is zipped, unzip it.
-2. Set the `datasetPath` variable to the path of the dataset containing the folders of images of cotton leaves. If you are using a different dataset that wasn't the provided dataset, make sure the images are in a folder with any name in the `Dataset` folder.
-3. Set the `inputImagePath` variable to the path of the image you want to classify.
+2. Set the `datasetPath` variable in main.m to the path of the dataset containing the folders of images of cotton leaves. If you are using a different dataset that wasn't the provided dataset, make sure the images are in a folder with any name in the `Dataset` folder.
+3. Set the `inputImagePath` variable in main.m to the path of the image you want to classify.
 4. Run `main.m` through Octave. The operation may take a second to process the images, so please wait patiently and observe progress through the command window.
 5. Note: On the first run, the application will create a `data.mat` file from the feature extraction of the current images in your dataset. After creation, the model will reference this file for classification instead of retraining every iteration.
 
